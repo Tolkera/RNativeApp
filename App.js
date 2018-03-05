@@ -6,20 +6,26 @@ import {
   View, TextInput, Alert, Button, TouchableHighlight, Dimensions, ScrollView, ImageBackground, Image, Slider,
     Switch, Picker,AlertIOS, DatePickerIOS, ActivityIndicator
 } from 'react-native';
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
 
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' +
-    'Cmd+D or shake for dev menu',
-  android: 'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
+import { combineReducers } from 'redux';
+
+import MainBtn from './components/main-button'
+import {pressRate, depressRate} from './reducers/pressing-reducer';
+
+
+const todoApp = combineReducers({
+  pressRate,
+  depressRate
 });
+
+
+let store = createStore(todoApp);
 
 var { height, width } = Dimensions.get('window');
 
 var box_count = 3;
-var box_height = height / box_count;
-var box_width = width / box_count;
-
 
 export default class App extends Component {
 
@@ -27,42 +33,27 @@ export default class App extends Component {
     super(props);
     this.state = {text: ''};
 
-    this.changeToPizza = this.changeToPizza.bind(this);
-    this.onPress = this.onPress.bind(this);
   }
 
-  onPress() {
-    Alert.alert('You tapped the button!')
-  }
   tweakText(){
-
-    return this.state.text.split(' ').map((word) => word && 'kvark').join(' ')
+    return this.state.text.split('').map((word) => word && 'kvark').join(' ')
   }
 
-  changeToPizza(){
-
-
-  }
 
   render() {
 
     return (
 
-      <ImageBackground style={styles.container} source={require('./images/bg.jpeg')}>
+        <Provider store={store}>
+
+        <ImageBackground style={styles.container} source={require('./images/bg.jpeg')}>
         <View style={styles.wrapper}>
           <View style={[styles.box, styles.header]}>
           </View>
           <View style={[styles.box, styles.main]}>
             <ScrollView style={styles.content}>
-              <Text style={styles.text}>
-                1 Lorem ipsum item
-              </Text>
-              <Text style={styles.text}>
-                2 Lorem ipsum item 22
-              </Text>
-              <Text style={styles.text}>
-                3 Lorem ipsum item
-              </Text>
+
+              <MainBtn  />
 
               <TextInput
                   style={styles.input}
@@ -96,14 +87,11 @@ export default class App extends Component {
 
 
     </ImageBackground>
-
+      </Provider>
 
     );
   }
 }
-
-
-
 
 const styles = StyleSheet.create({
   container: {
@@ -152,3 +140,4 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,255,255,.6)'
   }
 });
+
