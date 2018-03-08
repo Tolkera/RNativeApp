@@ -1,92 +1,48 @@
 import React, { Component } from 'react';
-import {
-  Platform,
-  StyleSheet,
-  Text,
-  View, TextInput, Alert, Button, TouchableHighlight, Dimensions, ScrollView, ImageBackground, Image, Slider,
-    Switch, Picker,AlertIOS, DatePickerIOS, ActivityIndicator
-} from 'react-native';
+import { StyleSheet,Text,View,  ScrollView, ImageBackground,  WebView } from 'react-native';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
-
 import { combineReducers } from 'redux';
-
-import MainBtn from './components/main-button'
-import {pressRate, depressRate} from './reducers/pressing-reducer';
-
+import VideoFeed from './script/containers/video-feed';
+import {videos} from './script/reducers/video-reducer';
+import {pressRate, depressRate} from './script/reducers/pressing-reducer';
 
 const todoApp = combineReducers({
-  pressRate,
-  depressRate
+  videos
 });
 
 
 let store = createStore(todoApp);
-
-var { height, width } = Dimensions.get('window');
-
-var box_count = 3;
 
 export default class App extends Component {
 
   constructor(props) {
     super(props);
     this.state = {text: ''};
-
   }
-
-  tweakText(){
-    return this.state.text.split('').map((word) => word && 'kvark').join(' ')
-  }
-
 
   render() {
 
     return (
 
         <Provider store={store}>
-
-        <ImageBackground style={styles.container} source={require('./images/bg.jpeg')}>
-        <View style={styles.wrapper}>
-          <View style={[styles.box, styles.header]}>
+          <ImageBackground style={styles.container} source={require('./images/bg.jpeg')}>
+          <View style={styles.wrapper}>
+          <View style={[ styles.header]}>
+            <Text>Header</Text>
           </View>
-          <View style={[styles.box, styles.main]}>
-            <ScrollView style={styles.content}>
-
-              <MainBtn  />
-
-              <TextInput
-                  style={styles.input}
-                  placeholder="Type here to translate!"
-                  onChangeText={(text) => this.setState({text})}
-              />
-
-              <Text style={styles.textOutput}>
-                {this.tweakText()}
-              </Text>
-
-              <ActivityIndicator size="large" color="#0000ff" />
-              <Slider></Slider>
-              <Switch></Switch>
 
 
-              <Picker
-                  selectedValue={this.state.language}
-                  onValueChange={(itemValue, itemIndex) => this.setState({language: itemValue})}>
-                <Picker.Item label="Java" value="java" />
-                <Picker.Item label="JavaScript" value="js" />
-                <Picker.Item label="Golang" value="go" />
-              </Picker>
-
-              <DatePickerIOS date={new Date()} onDateChange={()=>{}}></DatePickerIOS>
-            </ScrollView>
-
+          <View style={[ styles.main]}>
+            <View style={styles.content}>
+              <VideoFeed />
+            </View>
           </View>
-          <View style={[styles.box, styles.footer]}></View>
+          <View style={[ styles.footer]}>
+            <Text>Footer</Text>
+          </View>
         </View>
-
-
-    </ImageBackground>
+          </ImageBackground>
       </Provider>
 
     );
@@ -94,6 +50,9 @@ export default class App extends Component {
 }
 
 const styles = StyleSheet.create({
+  content: {
+      flex:1
+  },
   container: {
     flex: 1,
     flexDirection: 'column',
@@ -114,8 +73,6 @@ const styles = StyleSheet.create({
   },
   main: {
     flex: 4,
-    //flexDirection: 'column',
-    //alignItems: 'center',
     padding: 20
   },
   footer: {
