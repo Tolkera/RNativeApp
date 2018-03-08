@@ -39,12 +39,15 @@ export default StyleSheet.create({
     },
     input: {
         marginTop: 20,
-        height: 50,
         borderRadius: 4,
         borderWidth: 0.5,
         padding: 10,
         fontSize: 16,
         borderColor: 'rgba(255,255,255,.8)',
         backgroundColor: 'rgba(255,255,255,.6)'
+    },
+    placeholder: {
+        textAlign: 'center',
+        fontWeight: 'bold'
     }
 });

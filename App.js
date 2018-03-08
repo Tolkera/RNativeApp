@@ -4,12 +4,11 @@ import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import { combineReducers } from 'redux';
 import Routes from './script/containers/routes'
-import {videos} from './script/reducers/video-reducer';
-import {pressRate, depressRate} from './script/reducers/pressing-reducer';
+import {videoReducer} from './script/reducers/video-reducer';
 
 
 const todoApp = combineReducers({
-  videos
+  videoReducer
 });
 
 

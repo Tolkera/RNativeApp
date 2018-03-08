@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text,View,FlatList,WebView } from 'react-native';
-import VideoItem from './video-item'
+import { StyleSheet, Text,View,FlatList,WebView, ActivityIndicator } from 'react-native';
+import VideoItem from './video-item';
+import styles from '../style.js';
 
 export default class VideoList extends Component {
 
@@ -9,6 +10,7 @@ export default class VideoList extends Component {
 
         this.renderItem = this.renderItem.bind(this);
         this.keyExtractor = this.keyExtractor.bind(this);
+
     }
 
     renderItem = ({item}) => (
@@ -23,14 +25,37 @@ export default class VideoList extends Component {
     render() {
 
         return (
-            <View >
-                <Text>Videos</Text>
-                <FlatList
-                    data={this.props.videos}
-                    extraData={this.state}
-                    keyExtractor={this.keyExtractor}
-                    renderItem={this.renderItem}
-                />
+            <View style={{marginTop: 10}}>
+
+                {this.props.loading ?
+                <ActivityIndicator size="large" color="#0000ff" />
+                    :
+                    <View>
+                        {
+                            this.props.isSearching ?
+
+                                <View>
+                                    { this.props.videos.length ?
+                                        <FlatList
+                                            data={this.props.videos}
+                                            extraData={this.state}
+                                            keyExtractor={this.keyExtractor}
+                                            renderItem={this.renderItem} />
+                                        :
+
+                                        <Text style={styles.placeholder}>
+                                            No items found, sir :/
+                                        </Text>
+                                    }
+                                </View> :
+                                <Text style={styles.placeholder}>Type in to start searching!</Text>
+                        }
+
+
+                    </View>
+
+                }
+
             </View>
 
         );

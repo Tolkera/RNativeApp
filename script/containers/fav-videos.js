@@ -17,7 +17,7 @@ class FavouriteVideos extends React.Component {
         title: 'Fav Videos'
     };
 
-    getVideoList(){
+    getVideoList(id){
         let url = 'https://www.googleapis.com/youtube/v3/search?key=AIzaSyCshZEMSvUmkJxZUpusBlfsZKg03xl0jLo&channelId=summerrayneoakes&part=snippet,id&order=date&maxResults=20';
         fetch(url, {
             method: 'GET',
@@ -40,10 +40,7 @@ class FavouriteVideos extends React.Component {
         return (
             <ImageBackground style={styles.container} source={require('../../images/bg.jpeg')}>
                 <View style={styles.wrapper}>
-                    <Button
-                        title="Add more videos"
-                        onPress={() => this.props.navigation.navigate('Home')}
-                    />
+                    <Button title="Add more videos" onPress={() => this.props.navigation.navigate('Home')}/>
                     <VideoList videos={this.props.videos} />
 
                 </View>
@@ -54,7 +51,8 @@ class FavouriteVideos extends React.Component {
 
 const mapStateToProps = state => {
     return {
-        videos: state.videos
+        videos: state.videoReducer.videos,
+        loading: state.videoReducer.loading
     }
 };
 
