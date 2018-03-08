@@ -23,15 +23,19 @@ export default class VideoItem extends React.PureComponent {
 
 const styles = StyleSheet.create({
     wrapper: {
-        paddingBottom: 25
+        paddingBottom: 45
     },
     item: {
         paddingBottom: 5,
         fontWeight: 'bold',
         textAlign: 'center'
+
     },
     video: {
         height: 150,
-        opacity: 0.7
+        opacity: 0.7,
+        shadowOffset:{  width: 5,  height: 5  },
+        shadowColor: 'black',
+        shadowOpacity: 1
     }
 });

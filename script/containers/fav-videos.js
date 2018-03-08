@@ -6,8 +6,7 @@ import styles from '../style.js';
 
 import VideoList from '../components/video-list';
 
-
-class VideoFeed extends React.Component {
+class FavouriteVideos extends React.Component {
     constructor(props){
         super(props);
 
@@ -15,11 +14,11 @@ class VideoFeed extends React.Component {
     }
 
     static navigationOptions = {
-        title: 'Fetch video'
+        title: 'Fav Videos'
     };
 
     getVideoList(){
-        let url = 'https://www.googleapis.com/youtube/v3/search?key=AIzaSyCshZEMSvUmkJxZUpusBlfsZKg03xl0jLo&channelId=UCQVqKlgU_BcrWl8RWuoi8ig&part=snippet,id&order=date&maxResults=20';
+        let url = 'https://www.googleapis.com/youtube/v3/search?key=AIzaSyCshZEMSvUmkJxZUpusBlfsZKg03xl0jLo&channelId=summerrayneoakes&part=snippet,id&order=date&maxResults=20';
         fetch(url, {
             method: 'GET',
             headers: {
@@ -41,11 +40,11 @@ class VideoFeed extends React.Component {
         return (
             <ImageBackground style={styles.container} source={require('../../images/bg.jpeg')}>
                 <View style={styles.wrapper}>
-                <Button
-                    title="Go to My Fav Videos"
-                    onPress={() => this.props.navigation.navigate('Fav')}
-                />
-                <VideoList videos={this.props.videos} />
+                    <Button
+                        title="Add more videos"
+                        onPress={() => this.props.navigation.navigate('Home')}
+                    />
+                    <VideoList videos={this.props.videos} />
 
                 </View>
             </ImageBackground>
@@ -59,5 +58,5 @@ const mapStateToProps = state => {
     }
 };
 
-module.exports = connect(mapStateToProps)(VideoFeed);
+module.exports = connect(mapStateToProps)(FavouriteVideos);
 

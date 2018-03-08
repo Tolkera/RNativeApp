@@ -23,7 +23,7 @@ export default class VideoList extends Component {
     render() {
 
         return (
-            <View>
+            <View >
                 <Text>Videos</Text>
                 <FlatList
                     data={this.props.videos}
