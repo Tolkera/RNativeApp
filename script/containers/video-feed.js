@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {StyleSheet, View, Button, ImageBackground, TextInput} from 'react-native';
-import { FetchVideosSuccess, FetchVideos, NoSearchTerm } from '../actions/actions'
+import {StyleSheet, View, Button, ImageBackground, TextInput, Text} from 'react-native';
+import { FetchVideosSuccess, FetchVideos, NoSearchTerm, NoFetchedVideos, SearchVideos } from '../actions/actions'
 import styles from '../style.js';
 
 import VideoList from '../components/video-list';
@@ -12,7 +12,8 @@ class VideoFeed extends React.Component {
         super(props);
 
         this.getVideoList = this.getVideoList.bind(this);
-        this.getVideoList = debounce(this.getVideoList, 1000)
+        this.getVideoList = debounce(this.getVideoList, 1000);
+        this.changeRoute = this.changeRoute.bind(this);
     }
 
     static navigationOptions = {
@@ -22,7 +23,7 @@ class VideoFeed extends React.Component {
     getVideoList(id){
 
         if (id){
-
+            this.props.dispatch(SearchVideos());
             this.props.dispatch(FetchVideos());
             let url = 'https://www.googleapis.com/youtube/v3/search?key=AIzaSyCshZEMSvUmkJxZUpusBlfsZKg03xl0jLo&channelId=UCQVqKlgU_BcrWl8RWuoi8ig&part=snippet,id&order=date&maxResults=20';
             fetch(url, {
@@ -32,9 +33,15 @@ class VideoFeed extends React.Component {
                     'Content-Type': 'application/json'
                 }
             }).then(res => {
-                res.json().then((res) => {
-                    this.props.dispatch(FetchVideosSuccess(res.items));
-                })
+
+                    res.json().then((res) => {
+
+                        if (res.items) {
+                            this.props.dispatch(FetchVideosSuccess(res.items));
+                        } else {
+                            this.props.dispatch(NoFetchedVideos())
+                        }
+                    })
             })
         }
 
@@ -43,18 +50,34 @@ class VideoFeed extends React.Component {
         }
     }
 
+    componentDidMount(){
+        this.getVideoList()
+    }
+
+    changeRoute(){
+        this.props.navigation.navigate('Fav');
+        this.props.dispatch(NoSearchTerm());
+    }
 
     render() {
+        console.log('rendering VideoFeed, isSearching:', this.props.isSearching);
 
         return (
             <ImageBackground style={styles.container} source={require('../../images/bg.jpeg')}>
                 <View style={styles.wrapper}>
-                    <Button title="Go to My Fav Videos" onPress={() => this.props.navigation.navigate('Fav')}/>
+                    <Button title="Go to My Fav Videos" onPress={this.changeRoute}/>
 
                     <TextInput style={styles.input}  onChangeText={this.getVideoList} />
-                    <VideoList videos={this.props.videos}
-                               loading={this.props.loading}
-                                isSearching = {this.props.isSearching}/>
+
+                    {
+                        this.props.isSearching ?
+
+                        <VideoList videos={this.props.videos}
+                                   loading={this.props.loading}
+                                   noVideosText="No videos were found :/" />
+
+                        :   <Text style={styles.placeholder}>Type in channel id</Text>
+                    }
                 </View>
             </ImageBackground>
         )

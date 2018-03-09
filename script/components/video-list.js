@@ -31,8 +31,6 @@ export default class VideoList extends Component {
                 <ActivityIndicator size="large" color="#0000ff" />
                     :
                     <View>
-                        {
-                            this.props.isSearching ?
 
                                 <View>
                                     { this.props.videos.length ?
@@ -44,18 +42,12 @@ export default class VideoList extends Component {
                                         :
 
                                         <Text style={styles.placeholder}>
-                                            No items found, sir :/
+                                            {this.props.noVideosText}
                                         </Text>
                                     }
-                                </View> :
-                                <Text style={styles.placeholder}>Type in to start searching!</Text>
-                        }
-
-
+                                </View>
                     </View>
-
                 }
-
             </View>
 
         );
