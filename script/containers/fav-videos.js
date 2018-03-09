@@ -27,10 +27,7 @@ class FavouriteVideos extends React.Component {
             }
         }).then(res => {
             res.json().then((res) => {
-
                     this.props.dispatch(FetchVideosSuccess(res.items || []));
-
-
             })
         })
     }
@@ -51,11 +48,6 @@ class FavouriteVideos extends React.Component {
                 </View>
             </ImageBackground>
         )
-    }
-
-    onExit(){
-        console.log('unmounted');
-        this.props.dispatch(NoSearchTerm())
     }
 }
 

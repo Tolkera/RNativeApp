@@ -60,7 +60,6 @@ class VideoFeed extends React.Component {
     }
 
     render() {
-        console.log('rendering VideoFeed, isSearching:', this.props.isSearching);
 
         return (
             <ImageBackground style={styles.container} source={require('../../images/bg.jpeg')}>

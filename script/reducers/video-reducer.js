@@ -37,13 +37,6 @@ export function videoReducer (state = {videos: [], loading: false}, action){
 
 
         case 'NO_SEARCH_TERM':
-            console.log(
-                {
-                    ...state,
-                    videos: [],
-                    isSearching: false
-                }
-            )
             return {
                 ...state,
                 videos: [],
