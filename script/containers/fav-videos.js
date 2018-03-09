@@ -10,30 +10,17 @@ class FavouriteVideos extends React.Component {
     constructor(props){
         super(props);
 
-        this.getVideoList = this.getVideoList.bind(this);
+     //   this.getVideoList = this.getVideoList.bind(this);
     }
 
     static navigationOptions = {
         title: 'Fav Videos'
     };
 
-    getVideoList(id){
-        let url = 'https://www.googleapis.com/youtube/v3/search?key=AIzaSyCshZEMSvUmkJxZUpusBlfsZKg03xl0jLo&channelId=summerrayneoakes&part=snippet,id&order=date&maxResults=20';
-        fetch(url, {
-            method: 'GET',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json'
-            }
-        }).then(res => {
-            res.json().then((res) => {
-                    this.props.dispatch(FetchVideosSuccess(res.items || []));
-            })
-        })
-    }
-
     componentDidMount() {
-        this.getVideoList();
+        //this.getVideoList()
+
+        console.log(this.props);
     }
 
     render() {
@@ -41,7 +28,7 @@ class FavouriteVideos extends React.Component {
             <ImageBackground style={styles.container} source={require('../../images/bg.jpeg')}>
                 <View style={styles.wrapper}>
                     <Button title="Add more videos" onPress={() => this.props.navigation.navigate('Home')}/>
-                    <VideoList videos={this.props.videos}
+                    <VideoList videos={this.props.favVideos}
                                loading={false}
                                 noVideosText="You have none yet. Add favourite videos in Fetch Video section"
                     />
@@ -53,8 +40,9 @@ class FavouriteVideos extends React.Component {
 
 const mapStateToProps = state => {
     return {
-        videos: state.videoReducer.videos,
-        loading: state.videoReducer.loading
+        loading: state.videoReducer.loading,
+        favVideos: state.videoReducer.favVideos
+
     }
 };
 

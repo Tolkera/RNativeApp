@@ -31,6 +31,9 @@ export const NoFetchedVideos = () => {
     }
 };
 
-
-
-
+export const AddVideoToFav = (item) => {
+    return {
+        type: 'ADD_FAV_VIDEO',
+        item
+    }
+};

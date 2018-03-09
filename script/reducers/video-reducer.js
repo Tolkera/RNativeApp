@@ -1,4 +1,12 @@
-export function videoReducer (state = {videos: [], loading: false}, action){
+import { getItemId } from '../utils/video';
+
+let initialState = {
+    favVideos: [],
+    videos: [],
+    loading: false
+};
+
+export function videoReducer (state = initialState, action){
     switch (action.type) {
         case 'FETCH_VIDEOS_SUCCESS':
             return {
@@ -44,8 +52,18 @@ export function videoReducer (state = {videos: [], loading: false}, action){
             };
             break;
 
+        case 'ADD_FAV_VIDEO':
+
+            let {item } = action;
+
+            let positionInFavVideos = state.favVideos.map((i)=> getItemId(i)).indexOf(getItemId(item));
+
+            if (positionInFavVideos < 0){
+                state.favVideos.push(item)
+            }
+            return state;
+        break;
+
     }
     return state || {};
 }
-
-

@@ -3,6 +3,8 @@ import { StyleSheet, Text,View,FlatList,WebView, ActivityIndicator } from 'react
 import VideoItem from './video-item';
 import styles from '../style.js';
 
+import { getItemId } from '../utils/video';
+
 export default class VideoList extends Component {
 
     constructor(props) {
@@ -15,12 +17,13 @@ export default class VideoList extends Component {
 
     renderItem = ({item}) => (
         <VideoItem
-            id={item.id.videoId}
-            title={item.snippet.title}
+            id={getItemId(item)}
+            item={item}
+            tweakItem={this.props.addVideoToFav}
         />
     );
 
-    keyExtractor = (item, index) =>  item.id.videoId || item.id.playlistId;
+    keyExtractor = (item, index) =>  getItemId(item);
 
     render() {
 
@@ -38,7 +41,8 @@ export default class VideoList extends Component {
                                             data={this.props.videos}
                                             extraData={this.state}
                                             keyExtractor={this.keyExtractor}
-                                            renderItem={this.renderItem} />
+                                            renderItem={this.renderItem}
+                                            />
                                         :
 
                                         <Text style={styles.placeholder}>

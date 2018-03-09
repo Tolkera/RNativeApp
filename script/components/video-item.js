@@ -1,20 +1,20 @@
 import React from 'react';
-import { StyleSheet, Text,View,FlatList,WebView } from 'react-native';
+import { StyleSheet, Text,View,FlatList,WebView, Button } from 'react-native';
 
 export default class VideoItem extends React.PureComponent {
     render() {
         let videoSource = 'https://www.youtube.com/embed/'+ this.props.id +  '?rel=0&autoplay=0&showinfo=0&controls=0';
-
         return (
 
             <View style={styles.wrapper}>
                 <Text style={styles.item}>
-                    {this.props.title}
+                    {this.props.item.title}
                 </Text>
                 <WebView style={styles.video}
                          javaScriptEnabled={true}
                          source={{uri: videoSource}}
                 />
+                <Button title="Tweak" onPress={()=>{this.props.tweakItem(this.props.item)}}></Button>
             </View>
         );
     }
