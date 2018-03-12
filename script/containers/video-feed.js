@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {StyleSheet, View, Button, ImageBackground, TextInput, Text} from 'react-native';
+import {StyleSheet, ScrollView, View, Button, ImageBackground, TextInput, Text} from 'react-native';
 import { FetchVideosSuccess, FetchVideos, NoSearchTerm, NoFetchedVideos, SearchVideos, AddVideoToFav } from '../actions/actions'
 import styles from '../style.js';
 import {isItemInFavs} from '../utils/video';
+import {transformToQuery} from '../utils/url';
 import VideoList from '../components/video-list';
 import PlaceholderText from '../components/placeholder';
 import NavButton from '../components/nav-btn';
@@ -23,11 +24,24 @@ class VideoFeed extends React.Component {
         title: 'Fetch video'
     };
 
-    getVideoList(id){
-        if (id){
+
+    getVideoList(query){
+
+        let basicUrl = 'https://www.googleapis.com/youtube/v3/search?';
+
+        let basicQuery = {
+            key: 'AIzaSyCshZEMSvUmkJxZUpusBlfsZKg03xl0jLo',
+            maxResults: 5,
+            order: 'date',
+            part: 'snippet,id'
+        };
+
+        if (query){
+
+            let url = basicUrl + transformToQuery(Object.assign(basicQuery, {q: query}));
+
             this.props.dispatch(SearchVideos());
             this.props.dispatch(FetchVideos());
-            let url = 'https://www.googleapis.com/youtube/v3/search?key=AIzaSyCshZEMSvUmkJxZUpusBlfsZKg03xl0jLo&channelId=UCQVqKlgU_BcrWl8RWuoi8ig&part=snippet,id&order=date&maxResults=5';
             fetch(url, {
                 method: 'GET',
                 headers: {
@@ -75,24 +89,26 @@ class VideoFeed extends React.Component {
 
 
         return (
-            <ImageBackground style={styles.container} source={require('../../images/bg.jpeg')}>
-                <View style={styles.wrapper}>
+            <ImageBackground style={[styles.container, StyleSheet.absoluteFill]} source={require('../../images/bg.jpeg')}>
+                <ScrollView style={styles.wrapper}>
                     <NavButton title="Go to My Fav Videos" onPress={()=>{ this.props.navigation.navigate('Fav')}}/>
                     <TextInput style={styles.input}  onChangeText={this.getVideoList} />
 
                     {
                         this.props.isSearching ?
 
-                        <VideoList videos={this.props.videos}
-                                   favVideos={this.props.favVideos}
-                                   loading={this.props.loading}
-                                   noVideosText="No videos were found :/"
-                                   actionBtn={actionBtn}/>
-                        :
+                            <VideoList videos={this.props.videos}
+                                       favVideos={this.props.favVideos}
+                                       loading={this.props.loading}
+                                       noVideosText="No videos were found :/"
+                                       actionBtn={actionBtn}/>
+                            :
                             <PlaceholderText text="Type in channel id"/>
                     }
-                </View>
+                </ScrollView>
             </ImageBackground>
+
+
         )
     }
 }
@@ -105,6 +121,7 @@ const mapStateToProps = state => {
         isSearching: state.videoReducer.isSearching
     }
 };
+
 
 module.exports = connect(mapStateToProps)(VideoFeed);
 

@@ -73,17 +73,23 @@ export function videoReducer (state = initialState, action){
 
         case 'REMOVE_FAV_VIDEO' :
 
-            return update(state, {
-                videos: {
-                    [getVideoPositionInArrayById(state.videos, action.item)]: {
-                        isInFavs: { $set: false }
-                    }
-                },
+            let updatedState = update(state, {
                 favVideos: {
                     $splice: [[getVideoPositionInArrayById(state.favVideos, action.item), 1]]
                 }
             });
 
+            if (getVideoPositionInArrayById(state.videos, action.item) > 0){
+                updatedState = update(state, {
+                    videos: {
+                        [getVideoPositionInArrayById(state.videos, action.item)]: {
+                            isInFavs: {$set: false}
+                        }
+                    }
+                })
+            }
+
+            return updatedState;
             break;
 
     }

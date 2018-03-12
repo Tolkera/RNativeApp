@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Button, ImageBackground} from 'react-native';
+import { ScrollView, View, Button, ImageBackground} from 'react-native';
 import styles from '../style.js';
 import { FetchVideosSuccess, NoFetchedVideos,NoSearchTerm, RemoveVideoFromFav  } from '../actions/actions';
+
 import NavButton from '../components/nav-btn';
 import VideoList from '../components/video-list';
 
@@ -31,14 +32,14 @@ class FavouriteVideos extends React.Component {
 
         return (
             <ImageBackground style={styles.container} source={require('../../images/bg.jpeg')}>
-                <View style={styles.wrapper}>
+                <ScrollView style={styles.wrapper}>
                     <NavButton title="Add more videos" onPress={()=>{ this.props.navigation.navigate('Home')}}/>
                     <VideoList videos={this.props.favVideos}
                                loading={false}
                                 noVideosText="You have none yet. Add favourite videos in Fetch Video section"
                                 actionBtn={actionBtn}
                     />
-                </View>
+                </ScrollView>
             </ImageBackground>
         )
     }
@@ -48,7 +49,6 @@ const mapStateToProps = state => {
     return {
         loading: state.videoReducer.loading,
         favVideos: state.videoReducer.favVideos
-
     }
 };
 
