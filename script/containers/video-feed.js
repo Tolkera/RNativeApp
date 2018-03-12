@@ -3,8 +3,10 @@ import { connect } from 'react-redux';
 import {StyleSheet, View, Button, ImageBackground, TextInput, Text} from 'react-native';
 import { FetchVideosSuccess, FetchVideos, NoSearchTerm, NoFetchedVideos, SearchVideos, AddVideoToFav } from '../actions/actions'
 import styles from '../style.js';
-
+import {isItemInFavs} from '../utils/video';
 import VideoList from '../components/video-list';
+import PlaceholderText from '../components/placeholder';
+import NavButton from '../components/nav-btn';
 import debounce from 'debounce';
 
 class VideoFeed extends React.Component {
@@ -14,6 +16,7 @@ class VideoFeed extends React.Component {
         this.getVideoList = this.getVideoList.bind(this);
         this.getVideoList = debounce(this.getVideoList, 1000);
         this.addVideoToFav = this.addVideoToFav.bind(this);
+        this.isItemInactive = this.isItemInactive.bind(this);
     }
 
     static navigationOptions = {
@@ -55,24 +58,38 @@ class VideoFeed extends React.Component {
         this.getVideoList()
     }
 
+    isItemInactive(i){
+        return isItemInFavs(i, this.props.favVideos);
+    }
+
+
     render() {
+
+        let actionBtn = {
+            shouldBeVariable: true,
+            onPress: this.addVideoToFav,
+            text: "Add to favs",
+            replacementText: "Added",
+            isItemInactive: "isInFavs"
+        };
+
 
         return (
             <ImageBackground style={styles.container} source={require('../../images/bg.jpeg')}>
                 <View style={styles.wrapper}>
-                    <Button title="Go to My Fav Videos" onPress={()=>{ this.props.navigation.navigate('Fav')}}/>
-
+                    <NavButton title="Go to My Fav Videos" onPress={()=>{ this.props.navigation.navigate('Fav')}}/>
                     <TextInput style={styles.input}  onChangeText={this.getVideoList} />
 
                     {
                         this.props.isSearching ?
 
                         <VideoList videos={this.props.videos}
+                                   favVideos={this.props.favVideos}
                                    loading={this.props.loading}
                                    noVideosText="No videos were found :/"
-                                   addVideoToFav={this.addVideoToFav}/>
-
-                        :   <Text style={styles.placeholder}>Type in channel id</Text>
+                                   actionBtn={actionBtn}/>
+                        :
+                            <PlaceholderText text="Type in channel id"/>
                     }
                 </View>
             </ImageBackground>
@@ -84,6 +101,7 @@ const mapStateToProps = state => {
     return {
         videos: state.videoReducer.videos,
         loading: state.videoReducer.loading,
+        favVideos: state.videoReducer.favVideos,
         isSearching: state.videoReducer.isSearching
     }
 };

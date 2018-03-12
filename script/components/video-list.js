@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text,View,FlatList,WebView, ActivityIndicator } from 'react-native';
 import VideoItem from './video-item';
+import PlaceholderText from '../components/placeholder';
 import styles from '../style.js';
 
 import { getItemId } from '../utils/video';
@@ -15,13 +16,24 @@ export default class VideoList extends Component {
 
     }
 
-    renderItem = ({item}) => (
-        <VideoItem
-            id={getItemId(item)}
-            item={item}
-            tweakItem={this.props.addVideoToFav}
-        />
-    );
+    renderItem = ({item}) => {
+
+        let { actionBtn } = this.props;
+
+        let isInactive = false;
+
+        if (actionBtn.shouldBeVariable){
+            isInactive = item[actionBtn.isItemInactive];
+        }
+
+        return (
+            <VideoItem
+                id={getItemId(item)}
+                item={item}
+                actionBtn={actionBtn}
+                isInactive= {isInactive}
+            />
+    )};
 
     keyExtractor = (item, index) =>  getItemId(item);
 
@@ -45,9 +57,7 @@ export default class VideoList extends Component {
                                             />
                                         :
 
-                                        <Text style={styles.placeholder}>
-                                            {this.props.noVideosText}
-                                        </Text>
+                                        <PlaceholderText text={this.props.noVideosText} />
                                     }
                                 </View>
                     </View>

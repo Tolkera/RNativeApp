@@ -1,4 +1,5 @@
-import { getItemId } from '../utils/video';
+import update from 'immutability-helper';
+import { getItemId, getVideoPositionInArrayById } from '../utils/video';
 
 let initialState = {
     favVideos: [],
@@ -16,7 +17,6 @@ export function videoReducer (state = initialState, action){
             };
         break;
 
-
         case 'FETCH_VIDEOS_START':
             return {
                 ...state,
@@ -25,7 +25,6 @@ export function videoReducer (state = initialState, action){
 
             };
         break;
-
 
         case 'NO_FETCHED_VIDEOS':
             return {
@@ -54,16 +53,40 @@ export function videoReducer (state = initialState, action){
 
         case 'ADD_FAV_VIDEO':
 
-            let {item } = action;
+            if (getVideoPositionInArrayById(state.favVideos, action.item) < 0){
 
-            let positionInFavVideos = state.favVideos.map((i)=> getItemId(i)).indexOf(getItemId(item));
-
-            if (positionInFavVideos < 0){
-                state.favVideos.push(item)
+                return update(state, {
+                    favVideos: {
+                        $push: [action.item]
+                    },
+                    videos: {
+                        [getVideoPositionInArrayById(state.videos, action.item)]: {
+                            isInFavs: { $set: true }
+                        }
+                    }
+                });
             }
+
             return state;
+
         break;
+
+        case 'REMOVE_FAV_VIDEO' :
+
+            return update(state, {
+                videos: {
+                    [getVideoPositionInArrayById(state.videos, action.item)]: {
+                        isInFavs: { $set: false }
+                    }
+                },
+                favVideos: {
+                    $splice: [[getVideoPositionInArrayById(state.favVideos, action.item), 1]]
+                }
+            });
+
+            break;
 
     }
     return state || {};
 }
+

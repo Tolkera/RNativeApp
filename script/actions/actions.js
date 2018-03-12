@@ -4,13 +4,11 @@ export const FetchVideos = () => {
     }
 };
 
-
 export const SearchVideos = () => {
     return {
         type: 'SEARCH_VIDEOS'
     }
 };
-
 
 export const FetchVideosSuccess = (videos) => {
     return {
@@ -34,6 +32,13 @@ export const NoFetchedVideos = () => {
 export const AddVideoToFav = (item) => {
     return {
         type: 'ADD_FAV_VIDEO',
+        item
+    }
+};
+
+export const RemoveVideoFromFav = (item) => {
+    return {
+        type: 'REMOVE_FAV_VIDEO',
         item
     }
 };

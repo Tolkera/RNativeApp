@@ -1,5 +1,7 @@
 import React from 'react';
+import ActionBtn from '../components/action-btn';
 import { StyleSheet, Text,View,FlatList,WebView, Button } from 'react-native';
+import PlaceholderText from './placeholder';
 
 export default class VideoItem extends React.PureComponent {
     render() {
@@ -14,12 +16,30 @@ export default class VideoItem extends React.PureComponent {
                          javaScriptEnabled={true}
                          source={{uri: videoSource}}
                 />
-                <Button title="Tweak" onPress={()=>{this.props.tweakItem(this.props.item)}}></Button>
+
+                {this.props.actionBtn ?
+
+                    <View>
+                        {this.props.isInactive ?
+
+                        <PlaceholderText text={this.props.actionBtn.replacementText} />
+                                :
+                            <ActionBtn
+                                item={this.props.item}
+                                onPress={this.props.actionBtn.onPress}
+                                title={this.props.actionBtn.text}
+                            />
+
+                        }
+                    </View>
+
+                    : null
+                }
+
             </View>
         );
     }
 }
-
 
 const styles = StyleSheet.create({
     wrapper: {
