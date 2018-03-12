@@ -7,12 +7,12 @@ import Routes from './script/containers/routes'
 import {videoReducer} from './script/reducers/video-reducer';
 
 
-const todoApp = combineReducers({
+const reducers = combineReducers({
   videoReducer
 });
 
 
-let store = createStore(todoApp);
+let store = createStore(reducers);
 
 export default class App extends Component {
 
